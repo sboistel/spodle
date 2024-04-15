@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Télécharger un fichier</title>
+</head>
+<body>
+    <h1>Télécharger un fichier</h1>
+    <form id="downloadForm">
+        <label for="urlInput">URL :</label>
+        <input type="text" id="urlInput" name="urlInput" required>
+        <button type="submit">Télécharger</button>
+    </form>
+
+    <script>
+        document.getElementById('downloadForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting normally
+
+            var url = document.getElementById('urlInput').value; // Get the URL from the input field
+
+            // Send a POST request to the server with the URL
+            fetch('/download', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ url: url })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text(); // Assuming the server sends back a text response
+            })
+            .then(data => {
+                // Display any response from the server
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+        });
+    </script>
+</body>
+</html>
